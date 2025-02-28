@@ -59,6 +59,21 @@ app.post('/reserve', async (req, res) => {
   }
 });
 
+app.get('/consult', async (req, res) => {
+  try {
+    // Verifica se a quadra existe
+    const query = 'SELECT * FROM quadras';
+    const result = await pool.query(query);
+    if (result.rowCount === 0) {
+      return res.status(404).json({ message: 'Quadra não encontrada.' });
+    }
+    return res.status(200).send(result.rows);
+  } catch (error) {
+    console.error('Erro na requisição:', error);
+    return res.status(500).json({ message: 'Erro interno.' });
+  }
+});
+
 app.listen(PORT, () => {
-  console.log("API rodando na porta ${PORT}");
+  console.log(`API rodando na porta ${PORT}`);
 });
