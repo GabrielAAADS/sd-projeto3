@@ -19,12 +19,13 @@ async function processMessage(msg) {
     const selectQuery = 'SELECT * FROM quadras WHERE number = $1';
     const result = await pool.query(selectQuery, [quadraNumber]);
     if (result.rowCount === 0) {
-      console.error("Quadra ${quadraNumber} não encontrada.");
+      console.error(`Quadra ${quadraNumber} não encontrada.`);
       return;
     }
     const quadra = result.rows[0];
+    console.log("opa ", quadra);
     if (quadra.status === 'alugada') {
-      console.error("Quadra ${quadraNumber} já está reservada.");
+      console.error(`Quadra ${quadraNumber} já está reservada.`);
       return;
     }
     // Atualiza o status da quadra para 'alugada' e registra os dados da reserva
@@ -34,7 +35,7 @@ async function processMessage(msg) {
       WHERE number = $5
     `;
     await pool.query(updateQuery, ['alugada', client, reservationTime, created_at, quadraNumber]);
-    console.log("Quadra ${quadraNumber} reservada para ${client}.");
+    console.log(`Quadra ${quadraNumber} reservada para ${client}.`);
   } catch (error) {
     console.error('Erro ao processar mensagem:', error);
   }
