@@ -23,7 +23,6 @@ async function processMessage(msg) {
       return;
     }
     const quadra = result.rows[0];
-    console.log("opa ", quadra);
     if (quadra.status === 'alugada') {
       console.error(`Quadra ${quadraNumber} já está reservada.`);
       return;
