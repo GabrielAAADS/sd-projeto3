@@ -14,7 +14,7 @@ const pool = new Pool({
 async function processMessage(msg) {
   try {
     const content = JSON.parse(msg.content.toString());
-    const { quadraNumber, reservationTime, client, created_at } = content;
+    const { quadraNumber, client, created_at } = content;
     // Consulta a quadra no banco de dados
     const selectQuery = 'SELECT * FROM quadras WHERE number = $1';
     const result = await pool.query(selectQuery, [quadraNumber]);
@@ -30,10 +30,10 @@ async function processMessage(msg) {
     // Atualiza o status da quadra para 'alugada' e registra os dados da reserva
     const updateQuery = `
       UPDATE quadras
-      SET status = $1, client = $2, reservation_time = $3, created_at = $4
-      WHERE number = $5
+      SET status = $1, client = $2, created_at = $3
+      WHERE number = $4
     `;
-    await pool.query(updateQuery, ['alugada', client, reservationTime, created_at, quadraNumber]);
+    await pool.query(updateQuery, ['alugada', client, created_at, quadraNumber]);
     console.log(`Quadra ${quadraNumber} reservada para ${client}.`);
   } catch (error) {
     console.error('Erro ao processar mensagem:', error);

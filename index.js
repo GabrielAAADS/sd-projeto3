@@ -32,8 +32,8 @@ connectRabbitMQ();
 
 // Endpoint para reservar uma quadra
 app.post('/reserve', async (req, res) => {
-  const { quadraNumber, reservationTime, client } = req.body;
-  if (!quadraNumber || !reservationTime || !client) {
+  const { quadraNumber, client } = req.body;
+  if (!quadraNumber || !client) {
     return res.status(400).json({ message: 'Campos quadraNumber, reservationTime e client são obrigatórios.' });
   }
   try {
@@ -46,7 +46,6 @@ app.post('/reserve', async (req, res) => {
     // Cria o payload da mensagem
     const message = {
       quadraNumber,
-      reservationTime,
       client,
       created_at: new Date()
     };
